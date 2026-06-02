@@ -41,62 +41,7 @@ st.markdown(
     .sidebar-brand {{ text-align: center; padding: 1.2rem 0 0.5rem; }}
     .sidebar-brand h2 {{ color: {BITCOIN_ORANGE}; margin: 0; font-size: 1.3rem; }}
     .sidebar-brand p {{ color: {GRAY_MUTED}; font-size: 0.75rem; margin: 0.1rem 0 0 0; }}
-
-    /* Tabel dataset bisa di-scroll horizontal di HP */
-    .stDataFrame {{ overflow-x: auto; }}
-    .stDataFrame table {{ min-width: 600px; }}
-
-    /* Sidebar collapse otomatis di HP */
-    @media (max-width: 768px) {{
-        section[data-testid="stSidebar"] {{
-            width: 0 !important;
-            min-width: 0 !important;
-            overflow: hidden;
-            transition: width 0.3s;
-        }}
-        section[data-testid="stSidebar"]:hover,
-        section[data-testid="stSidebar"]:focus-within {{
-            width: 250px !important;
-            min-width: 250px !important;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.5);
-            z-index: 999;
-        }}
-        section[data-testid="stSidebar"] + section {{
-            margin-left: 0 !important;
-        }}
-        .price-hero .value {{ font-size: 1.6rem; }}
-        .price-hero .delta {{ font-size: 0.9rem; display: block; margin-left: 0; }}
-        .metric-card .mv {{ font-size: 1rem; }}
-        .stRadio > div[role=radiogroup] {{ flex-wrap: wrap; }}
-        button[kind="header"] {{ font-size: 0.8rem; }}
-    }}
     </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Tambahkan JavaScript untuk toggle sidebar di mobile
-st.markdown(
-    """
-    <script>
-    // Fungsi untuk toggle sidebar di layar kecil
-    function toggleSidebar() {
-        const sidebar = document.querySelector('section[data-testid="stSidebar"]');
-        if (sidebar) {
-            const current = sidebar.style.width;
-            sidebar.style.width = current === '250px' ? '0' : '250px';
-            sidebar.style.minWidth = current === '250px' ? '0' : '250px';
-        }
-    }
-    // Tambah tombol toggle jika di mobile
-    if (window.innerWidth <= 768) {
-        const btn = document.createElement('button');
-        btn.innerHTML = '☰';
-        btn.style.cssText = 'position:fixed; top:10px; left:10px; z-index:9999; background:#F7931A; color:white; border:none; border-radius:8px; padding:8px 14px; font-size:20px; cursor:pointer;';
-        btn.onclick = toggleSidebar;
-        document.body.appendChild(btn);
-    }
-    </script>
     """,
     unsafe_allow_html=True,
 )
