@@ -1,0 +1,10 @@
+*
+!/.gitignore
+!/app.py
+!/btc_2015_2024.csv
+!/requirements.txt
+
+__pycache__/
+*.pyc
+.env
+.streamlit/
