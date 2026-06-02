@@ -116,7 +116,7 @@ if menu == "Beranda":
 
     st.divider()
     st.subheader("Cuplikan Dataset")
-    st.dataframe(df.head(10), use_container_width=True)
+    st.dataframe(df, use_container_width=True, height=400)
     st.caption(f"Total {len(df):,} baris data · 20 kolom")
 
 # MENU TREN HARGA
