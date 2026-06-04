@@ -315,7 +315,7 @@ elif menu == "Tren Harga":
     )
 
     if log_scale:
-        fig.update_yaxis(type="log", row=1, col=1)
+        fig.update_yaxes(type="log", row=1, col=1)
 
     fig.update_xaxes(showgrid=True, gridcolor=CMC_BORDER, row=1, col=1)
     fig.update_yaxes(showgrid=True, gridcolor=CMC_BORDER, tickprefix="$", tickformat=",", row=1, col=1)
