@@ -1,9 +1,23 @@
+# Ignore everything
 *
+
+# But track these specific paths
 !/.gitignore
 !/app.py
 !/btc_2015_2024.csv
 !/requirements.txt
 
+# MPA page modules
+!/navigation/
+!/navigation/*.py
+!/navigation/__init__.py
+
+# Image assets
+!/img/
+!/img/*.jpg
+!/img/*.png
+
+# Standard Python ignores
 __pycache__/
 *.pyc
 .env

@@ -1,0 +1,3 @@
+from navigation.beranda import show_beranda
+from navigation.tren_harga import show_tren_harga
+from navigation.indikator_teknikal import show_indikator_teknikal
