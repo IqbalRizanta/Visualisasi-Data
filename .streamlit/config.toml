@@ -1,0 +1,17 @@
+[server]
+# Enable XSRF protection to prevent cross-site request forgery attacks
+enableXsrfProtection = true
+
+# Restrict CORS — only same-origin requests allowed by default
+enableCORS = false
+
+# Disable file watcher in production to avoid unnecessary filesystem access
+fileWatcherType = "none"
+
+[browser]
+# Do not automatically open browser on server start
+serverAddress = "0.0.0.0"
+
+[client]
+# Disable toolbar in production to hide debug-like controls from end users
+toolbarMode = "minimal"
