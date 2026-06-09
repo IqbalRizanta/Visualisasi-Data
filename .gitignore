@@ -6,6 +6,7 @@
 !/app.py
 !/btc_2015_2024.csv
 !/requirements.txt
+!/SECURITY.md
 
 # MPA page modules
 !/navigation/
@@ -17,9 +18,13 @@
 !/img/*.jpg
 !/img/*.png
 
+# Streamlit config (track config, ignore secrets)
+!/.streamlit/
+!/.streamlit/config.toml
+.streamlit/secrets.toml
+
 # Standard Python ignores
 __pycache__/
 *.pyc
 .env
-.streamlit/
 .venv/

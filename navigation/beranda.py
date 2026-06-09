@@ -217,8 +217,9 @@ def show_beranda(df):
     df_tampil = df_tampil[(df_tampil["volume"] >= vol_min) & (df_tampil["volume"] <= vol_max)]
 
     if cari:
+        cari_sanitized = cari[:200]
         mask = df_tampil.astype(str).apply(
-            lambda x: x.str.contains(cari, case=False, na=False)
+            lambda x: x.str.contains(cari_sanitized, case=False, na=False, regex=False)
         ).any(axis=1)
         df_tampil = df_tampil[mask]
 
