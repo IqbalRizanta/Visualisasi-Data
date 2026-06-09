@@ -2,19 +2,14 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-CMC_BG = "#0B0E11"
-CMC_CARD = "#1E2329"
-CMC_GREEN = "#16C784"
-CMC_RED = "#EA3943"
-CMC_TEXT = "#FFFFFF"
-CMC_TEXT2 = "#848E9C"
-CMC_BORDER = "#2B3139"
-CMC_ORANGE = "#F7931A"
+from navigation.theme import (
+    CMC_GREEN, CMC_RED, CMC_TEXT, CMC_TEXT2, CMC_BORDER,
+    section_heading, base_chart_layout, apply_grid_styling,
+)
 
 
 def show_tren_harga(df):
-    st.markdown(f'<p style="color:{CMC_TEXT}; font-size:1.3rem; font-weight:700;">Bitcoin to USD Chart</p>', unsafe_allow_html=True)
+    section_heading("Bitcoin to USD Chart", font_size="1.3rem")
 
     tahun_min = int(df["date"].dt.year.min())
     tahun_max = int(df["date"].dt.year.max())
@@ -81,28 +76,23 @@ def show_tren_harga(df):
         row=2, col=1,
     )
 
-    fig.update_layout(
+    fig.update_layout(**base_chart_layout(
         title=dict(
             text=f"BTC/USD ({tahun_terpilih[0]}–{tahun_terpilih[1]})",
             font=dict(size=16, color=CMC_TEXT),
             x=0.5, xanchor="center",
         ),
-        hovermode="x unified",
         margin=dict(t=50, b=30, l=30, r=30),
-        plot_bgcolor=CMC_CARD,
-        paper_bgcolor=CMC_BG,
-        font=dict(family="Inter, sans-serif", color=CMC_TEXT2),
-        hoverlabel=dict(bgcolor=CMC_CARD, font_size=12, font_color=CMC_TEXT, font_family="Inter"),
         xaxis2=dict(showgrid=True, gridcolor=CMC_BORDER, dtick="M12", tickformat="%Y"),
         yaxis2=dict(showgrid=True, gridcolor=CMC_BORDER, title=dict(text="Volume")),
         legend=dict(orientation="h", yanchor="bottom", y=1.005, xanchor="right", x=1, font=dict(color=CMC_TEXT2)),
-    )
+    ))
 
     if log_scale:
         fig.update_yaxes(type="log", row=1, col=1)
 
-    fig.update_xaxes(showgrid=True, gridcolor=CMC_BORDER, row=1, col=1)
-    fig.update_yaxes(showgrid=True, gridcolor=CMC_BORDER, tickprefix="$", tickformat=",", row=1, col=1)
+    apply_grid_styling(fig, rows=2)
+    fig.update_yaxes(tickprefix="$", tickformat=",", row=1, col=1)
 
     st.plotly_chart(fig, config={'responsive': True})
 
@@ -122,17 +112,13 @@ def show_tren_harga(df):
             fillcolor="rgba(234, 57, 67, 0.10)",
         )
     )
-    fig2.update_layout(
+    fig2.update_layout(**base_chart_layout(
         title=dict(text="Drawdown dari All-Time High (%)", font=dict(size=13, color=CMC_TEXT), x=0.5, xanchor="center"),
-        hovermode="x unified",
         height=160,
         margin=dict(t=30, b=20, l=30, r=30),
-        plot_bgcolor=CMC_CARD,
-        paper_bgcolor=CMC_BG,
-        font=dict(family="Inter, sans-serif", color=CMC_TEXT2),
         xaxis=dict(showgrid=True, gridcolor=CMC_BORDER, dtick="M12", tickformat="%Y"),
         yaxis=dict(showgrid=True, gridcolor=CMC_BORDER, ticksuffix="%"),
-    )
+    ))
     st.plotly_chart(fig2, config={'responsive': True})
 
     col1, col2, col3, col4 = st.columns(4)

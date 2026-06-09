@@ -1,14 +1,10 @@
 import streamlit as st
 import pandas as pd
-
-CMC_BG = "#0B0E11"
-CMC_CARD = "#1E2329"
-CMC_GREEN = "#16C784"
-CMC_RED = "#EA3943"
-CMC_TEXT = "#FFFFFF"
-CMC_TEXT2 = "#848E9C"
-CMC_BORDER = "#2B3139"
-CMC_ORANGE = "#F7931A"
+from navigation.theme import (
+    CMC_CARD, CMC_GREEN, CMC_RED,
+    CMC_TEXT, CMC_TEXT2, CMC_BORDER, CMC_ORANGE,
+    section_heading, card_container,
+)
 
 
 def show_beranda(df):
@@ -73,7 +69,7 @@ def show_beranda(df):
     st.divider()
 
     # === ABOUT DATASET ===
-    st.markdown(f'<p style="color:{CMC_TEXT}; font-size:1.1rem; font-weight:700;">Bitcoin Price Trends With Indicators (8 Years)</p>', unsafe_allow_html=True)
+    section_heading("Bitcoin Price Trends With Indicators (8 Years)")
 
     teks = (
         "This dataset offers a detailed examination of Bitcoin's price behavior over the last eight years, "
@@ -94,22 +90,15 @@ def show_beranda(df):
         "This dataset's primary goal is to forecast the closing price for the next day, making it a crucial "
         "tool for predicting future market movements."
     )
-    st.markdown(
-        f"""
-        <div style="background:{CMC_CARD}; border:1px solid {CMC_BORDER}; border-radius:10px; padding:1rem 1.2rem; margin:0.5rem 0 1rem 0;">
-            <p style="color:{CMC_TEXT2}; font-size:0.88rem; line-height:1.6; margin:0;">{teks}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    card_container(
+        f'<p style="color:{CMC_TEXT2}; font-size:0.88rem; line-height:1.6; margin:0;">{teks}</p>'
     )
 
     # === TENTANG DATASET ===
-    st.markdown(f'<p style="color:{CMC_TEXT}; font-size:1.1rem; font-weight:700;">Tentang Dataset</p>', unsafe_allow_html=True)
+    section_heading("Tentang Dataset")
 
     sum_na = df.isna().sum().sum()
-    st.markdown(
-        f"""
-        <div style="background:{CMC_CARD}; border:1px solid {CMC_BORDER}; border-radius:10px; padding:1rem 1.2rem; margin:0.5rem 0 1rem 0;">
+    dataset_table = f"""
             <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
                 <tr>
                     <td style="color:{CMC_TEXT2}; padding:0.3rem 0.8rem 0.3rem 0; width:140px;">Sumber</td>
@@ -139,10 +128,8 @@ def show_beranda(df):
                     </td>
                 </tr>
             </table>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    """
+    card_container(dataset_table)
 
     # Struktur kolom
     st.markdown(f'<p style="color:{CMC_TEXT2}; font-size:0.8rem; font-weight:600; margin-bottom:0.3rem;">STRUKTUR KOLOM</p>', unsafe_allow_html=True)
@@ -178,10 +165,7 @@ def show_beranda(df):
         )
     tabel_html += "</table>"
 
-    st.markdown(
-        f'<div style="background:{CMC_CARD}; border:1px solid {CMC_BORDER}; border-radius:10px; padding:0.5rem 1rem; margin:0.3rem 0 1.2rem 0;">{tabel_html}</div>',
-        unsafe_allow_html=True,
-    )
+    card_container(tabel_html, padding="0.5rem 1rem", margin="0.3rem 0 1.2rem 0")
 
     # === DATA TABLE ===
     st.markdown(f'<p style="color:{CMC_TEXT2}; font-size:0.85rem; font-weight:600;">CUPLIKAN DATASET</p>', unsafe_allow_html=True)

@@ -1,18 +1,12 @@
 import streamlit as st
 import pandas as pd
 from navigation import show_beranda, show_tren_harga, show_indikator_teknikal
+from navigation.theme import (
+    CMC_BG, CMC_CARD, CMC_GREEN, CMC_RED,
+    CMC_TEXT, CMC_TEXT2, CMC_BORDER, CMC_ORANGE,
+)
 
 st.set_page_config(page_title="Bitcoin Dashboard - CMC Style", layout="wide")
-
-# Palet CoinMarketCap
-CMC_BG = "#0B0E11"
-CMC_CARD = "#1E2329"
-CMC_GREEN = "#16C784"
-CMC_RED = "#EA3943"
-CMC_TEXT = "#FFFFFF"
-CMC_TEXT2 = "#848E9C"
-CMC_BORDER = "#2B3139"
-CMC_ORANGE = "#F7931A"
 
 st.markdown(
     f"""
