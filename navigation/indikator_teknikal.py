@@ -1,6 +1,10 @@
+import logging
+
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
+logger = logging.getLogger(__name__)
 
 CMC_BG = "#0B0E11"
 CMC_CARD = "#1E2329"
@@ -34,6 +38,21 @@ def show_indikator_teknikal(df):
     if len(pilihan) < 2:
         st.warning("Pilih minimal 2 indikator.")
     else:
+        missing_cols = [
+            nama for nama in pilihan
+            if indikator_tersedia[nama] not in df.columns
+        ]
+        if missing_cols:
+            st.error(
+                f"The dataset is missing columns for: {', '.join(missing_cols)}. "
+                "These indicators cannot be displayed."
+            )
+            logger.error("Missing indicator columns: %s", missing_cols)
+            pilihan = [p for p in pilihan if p not in missing_cols]
+            if len(pilihan) < 2:
+                st.warning("Not enough valid indicators remaining (need at least 2).")
+                return
+
         n_rows = 1 + len(pilihan)
         fig = make_subplots(
             rows=n_rows, cols=1,

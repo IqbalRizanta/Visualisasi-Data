@@ -1,6 +1,15 @@
+import logging
+import os
+
 import streamlit as st
 import pandas as pd
 from navigation import show_beranda, show_tren_harga, show_indikator_teknikal
+
+logger = logging.getLogger(__name__)
+
+REQUIRED_COLUMNS = {
+    "date", "open", "high", "low", "close", "volume",
+}
 
 st.set_page_config(page_title="Bitcoin Dashboard - CMC Style", layout="wide")
 
@@ -88,13 +97,45 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+CSV_PATH = "btc_2015_2024.csv"
+
+
 @st.cache_data
 def load_data():
-    df = pd.read_csv("btc_2015_2024.csv")
-    df["date"] = pd.to_datetime(df["date"])
+    if not os.path.isfile(CSV_PATH):
+        raise FileNotFoundError(f"Dataset file '{CSV_PATH}' not found.")
+
+    df = pd.read_csv(CSV_PATH)
+
+    if df.empty:
+        raise ValueError(f"Dataset '{CSV_PATH}' is empty.")
+
+    missing = REQUIRED_COLUMNS - set(df.columns)
+    if missing:
+        raise ValueError(
+            f"Dataset is missing required columns: {', '.join(sorted(missing))}"
+        )
+
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    bad_dates = df["date"].isna().sum()
+    if bad_dates > 0:
+        logger.warning("%d rows have unparseable dates and will be dropped.", bad_dates)
+        df = df.dropna(subset=["date"])
+
+    if len(df) < 2:
+        raise ValueError(
+            "Dataset must contain at least 2 rows after cleaning."
+        )
+
     return df
 
-df = load_data()
+
+try:
+    df = load_data()
+except (FileNotFoundError, ValueError, pd.errors.ParserError) as exc:
+    st.error(f"Failed to load dataset: {exc}")
+    logger.exception("Failed to load dataset")
+    st.stop()
 
 # Top bar navigasi ala CMC
 st.markdown(

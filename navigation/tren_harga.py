@@ -1,7 +1,11 @@
+import logging
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
+logger = logging.getLogger(__name__)
 
 CMC_BG = "#0B0E11"
 CMC_CARD = "#1E2329"
@@ -27,6 +31,10 @@ def show_tren_harga(df):
     batas_awal = pd.Timestamp(f"{tahun_terpilih[0]}-01-01")
     batas_akhir = pd.Timestamp(f"{tahun_terpilih[1]}-12-31")
     df_f = df[(df["date"] >= batas_awal) & (df["date"] <= batas_akhir)]
+
+    if df_f.empty:
+        st.warning("No data available for the selected date range.")
+        return
 
     log_scale = st.checkbox("Log Scale (untuk melihat pertumbuhan eksponensial)", value=False)
 
@@ -109,7 +117,7 @@ def show_tren_harga(df):
     # -- Drawdown Chart --
     ath = df_f["close"].max()
     df_f = df_f.copy()
-    df_f["drawdown"] = (df_f["close"] - ath) / ath * 100
+    df_f["drawdown"] = ((df_f["close"] - ath) / ath * 100) if ath != 0 else 0.0
 
     fig2 = go.Figure()
     fig2.add_trace(
@@ -138,6 +146,7 @@ def show_tren_harga(df):
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Open", f"${df_f['open'].iloc[0]:,.0f}")
     col2.metric("Close", f"${df_f['close'].iloc[-1]:,.0f}")
-    perf = ((df_f["close"].iloc[-1] - df_f["close"].iloc[0]) / df_f["close"].iloc[0]) * 100
+    first_close = df_f["close"].iloc[0]
+    perf = ((df_f["close"].iloc[-1] - first_close) / first_close * 100) if first_close != 0 else 0.0
     col3.metric("Change", f"{perf:+.2f}%")
     col4.metric("Drawdown Maks", f"{df_f['drawdown'].min():.1f}%")
