@@ -1,5 +1,9 @@
+import logging
+
 import streamlit as st
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 CMC_BG = "#0B0E11"
 CMC_CARD = "#1E2329"
@@ -12,14 +16,22 @@ CMC_ORANGE = "#F7931A"
 
 
 def show_beranda(df):
+    if df.empty or len(df) < 2:
+        st.error("Not enough data to display the dashboard (need at least 2 rows).")
+        return
+
     harga_now = df["close"].iloc[-1]
     harga_sebelum = df["close"].iloc[-2]
     selisih = harga_now - harga_sebelum
-    pct = (selisih / harga_sebelum) * 100
+    pct = (selisih / harga_sebelum * 100) if harga_sebelum != 0 else 0.0
     delta_class = "up" if selisih >= 0 else "down"
     arrow = "▲" if selisih >= 0 else "▼"
     ath = df["close"].max()
-    ath_date = df.loc[df["close"].idxmax(), "date"].strftime("%d %b %Y")
+    try:
+        ath_date = df.loc[df["close"].idxmax(), "date"].strftime("%d %b %Y")
+    except (KeyError, ValueError):
+        logger.warning("Could not determine ATH date")
+        ath_date = "N/A"
 
     st.markdown(
         f"""
@@ -46,7 +58,7 @@ def show_beranda(df):
             <div class="stat-item">
                 <div class="sl">Market Cap</div>
                 <div class="sv">${market_cap:,.0f}</div>
-                <div class="sp">+{'%.2f' % ((harga_now - df['close'].iloc[0])/df['close'].iloc[0]*100)}%</div>
+                <div class="sp">+{'%.2f' % ((harga_now - df['close'].iloc[0])/df['close'].iloc[0]*100) if df['close'].iloc[0] != 0 else 'N/A'}%</div>
             </div>
             <div class="stat-item">
                 <div class="sl">Volume (24j)</div>
