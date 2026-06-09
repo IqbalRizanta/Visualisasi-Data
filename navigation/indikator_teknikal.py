@@ -1,19 +1,15 @@
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-CMC_BG = "#0B0E11"
-CMC_CARD = "#1E2329"
-CMC_GREEN = "#16C784"
-CMC_RED = "#EA3943"
-CMC_TEXT = "#FFFFFF"
-CMC_TEXT2 = "#848E9C"
-CMC_BORDER = "#2B3139"
-CMC_ORANGE = "#F7931A"
+from navigation.theme import (
+    CMC_GREEN, CMC_RED,
+    CMC_TEXT, CMC_TEXT2, CMC_ORANGE,
+    section_heading, base_chart_layout, apply_grid_styling,
+)
 
 
 def show_indikator_teknikal(df):
-    st.markdown(f'<p style="color:{CMC_TEXT}; font-size:1.3rem; font-weight:700;">Analisis Indikator Teknikal</p>', unsafe_allow_html=True)
+    section_heading("Analisis Indikator Teknikal", font_size="1.3rem")
 
     indikator_tersedia = {
         "RSI 14": "rsi_14",
@@ -68,18 +64,12 @@ def show_indikator_teknikal(df):
                 fig.add_hline(y=70, line=dict(color=CMC_RED, width=1, dash="dash"), row=i + 2, col=1)
                 fig.add_hline(y=30, line=dict(color=CMC_GREEN, width=1, dash="dash"), row=i + 2, col=1)
 
-        fig.update_layout(
-            hovermode="x unified",
+        fig.update_layout(**base_chart_layout(
             height=180 * n_rows,
             margin=dict(t=20, b=30, l=30, r=30),
-            plot_bgcolor=CMC_CARD,
-            paper_bgcolor=CMC_BG,
-            font=dict(family="Inter, sans-serif", color=CMC_TEXT2),
             legend=dict(orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1, font=dict(color=CMC_TEXT2)),
-        )
-        for i in range(1, n_rows + 1):
-            fig.update_xaxes(showgrid=True, gridcolor=CMC_BORDER, row=i, col=1)
-            fig.update_yaxes(showgrid=True, gridcolor=CMC_BORDER, row=i, col=1)
+        ))
+        apply_grid_styling(fig, rows=n_rows)
 
         st.plotly_chart(fig, config={'responsive': True})
 
