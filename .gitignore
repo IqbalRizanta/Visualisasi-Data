@@ -12,6 +12,12 @@
 !/navigation/*.py
 !/navigation/__init__.py
 
+# Test files
+!/tests/
+!/tests/*.py
+!/tests/conftest.py
+!/pytest.ini
+
 # Image assets
 !/img/
 !/img/*.jpg
